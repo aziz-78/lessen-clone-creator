@@ -6,6 +6,7 @@ import Services from '../components/Services';
 import Testimonials from '../components/Testimonials';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import { Card, CardContent } from '@/components/ui/card';
 
 const Index = () => {
   useEffect(() => {
@@ -59,24 +60,35 @@ const Index = () => {
             </div>
             
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <StepCard 
-                number={1}
-                title="Request Service"
-                description="Submit your service request through our intuitive platform or speak with a property specialist."
-                delay={0}
-              />
-              <StepCard 
-                number={2}
-                title="Get Matched"
-                description="We match your request with qualified professionals from our vetted network of service providers."
-                delay={1}
-              />
-              <StepCard 
-                number={3}
-                title="Service Delivered"
-                description="Receive high-quality service with real-time updates and transparent documentation."
-                delay={2}
-              />
+              <Card className="animate-on-scroll opacity-0 hover-lift bg-white rounded-lg shadow-subtle" style={{ animationDelay: '0s' }}>
+                <CardContent className="flex flex-col items-center text-center p-6">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold mb-6">
+                    1
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Request Service</h3>
+                  <p className="text-muted-foreground">Submit your service request through our intuitive platform or speak with a property specialist.</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="animate-on-scroll opacity-0 hover-lift bg-white rounded-lg shadow-subtle" style={{ animationDelay: '0.15s' }}>
+                <CardContent className="flex flex-col items-center text-center p-6">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold mb-6">
+                    2
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Get Matched</h3>
+                  <p className="text-muted-foreground">We match your request with qualified professionals from our vetted network of service providers.</p>
+                </CardContent>
+              </Card>
+              
+              <Card className="animate-on-scroll opacity-0 hover-lift bg-white rounded-lg shadow-subtle" style={{ animationDelay: '0.3s' }}>
+                <CardContent className="flex flex-col items-center text-center p-6">
+                  <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold mb-6">
+                    3
+                  </div>
+                  <h3 className="text-xl font-semibold mb-3">Service Delivered</h3>
+                  <p className="text-muted-foreground">Receive high-quality service with real-time updates and transparent documentation.</p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
@@ -126,28 +138,6 @@ const Index = () => {
         <Contact />
       </main>
       <Footer />
-    </div>
-  );
-};
-
-interface StepCardProps {
-  number: number;
-  title: string;
-  description: string;
-  delay: number;
-}
-
-const StepCard = ({ number, title, description, delay }: StepCardProps) => {
-  return (
-    <div 
-      className="flex flex-col items-center text-center p-6 animate-on-scroll opacity-0 hover-lift bg-white rounded-lg shadow-subtle"
-      style={{ animationDelay: `${delay * 0.15}s` }}
-    >
-      <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold mb-6">
-        {number}
-      </div>
-      <h3 className="text-xl font-semibold mb-3">{title}</h3>
-      <p className="text-muted-foreground">{description}</p>
     </div>
   );
 };
