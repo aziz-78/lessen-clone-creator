@@ -63,16 +63,19 @@ const Index = () => {
                 number={1}
                 title="Request Service"
                 description="Submit your service request through our intuitive platform or speak with a property specialist."
+                delay={0}
               />
               <StepCard 
                 number={2}
                 title="Get Matched"
                 description="We match your request with qualified professionals from our vetted network of service providers."
+                delay={1}
               />
               <StepCard 
                 number={3}
                 title="Service Delivered"
                 description="Receive high-quality service with real-time updates and transparent documentation."
+                delay={2}
               />
             </div>
           </div>
@@ -131,15 +134,19 @@ interface StepCardProps {
   number: number;
   title: string;
   description: string;
+  delay: number;
 }
 
-const StepCard = ({ number, title, description }: StepCardProps) => {
+const StepCard = ({ number, title, description, delay }: StepCardProps) => {
   return (
-    <div className="flex flex-col items-center text-center p-6 animate-on-scroll opacity-0">
-      <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold mb-4">
+    <div 
+      className="flex flex-col items-center text-center p-6 animate-on-scroll opacity-0 hover-lift bg-white rounded-lg shadow-subtle"
+      style={{ animationDelay: `${delay * 0.15}s` }}
+    >
+      <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xl font-bold mb-6">
         {number}
       </div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
+      <h3 className="text-xl font-semibold mb-3">{title}</h3>
       <p className="text-muted-foreground">{description}</p>
     </div>
   );
