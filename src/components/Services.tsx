@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CheckCircle, Home, Tool, Paintbrush, Shield, Search, Clock, Zap } from 'lucide-react';
+import { CheckCircle, Home, Wrench, Paintbrush, Shield, Search, Clock, Zap } from 'lucide-react';
 
 const Services = () => {
   return (
@@ -84,7 +84,7 @@ const serviceCards = [
   {
     title: 'Maintenance & Repairs',
     description: 'Keep your property in perfect condition with our comprehensive maintenance services.',
-    icon: Tool,
+    icon: Wrench,
     features: [
       'Emergency repairs available 24/7',
       'Scheduled preventative maintenance',
