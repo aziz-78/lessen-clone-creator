@@ -1,8 +1,50 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckCircle, Home, Wrench, Paintbrush, Shield, Search, Clock, Zap } from 'lucide-react';
+import { fetchServices, ServiceItem } from '../utils/api';
+import { useToast } from "@/components/ui/use-toast";
 
 const Services = () => {
+  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const loadServices = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchServices();
+        setServices(data);
+      } catch (error) {
+        console.error("Failed to fetch services:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load services. Please refresh the page.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadServices();
+  }, [toast]);
+
+  // Icon mapping function
+  const getIconComponent = (iconName: string) => {
+    const iconMap: Record<string, React.ElementType> = {
+      Wrench: Wrench,
+      Paintbrush: Paintbrush,
+      Search: Search,
+      Zap: Zap,
+      Shield: Shield,
+      Clock: Clock,
+      Home: Home,
+    };
+    
+    return iconMap[iconName] || Home; // Default to Home if icon not found
+  };
+
   return (
     <section id="services" className="py-24 bg-secondary/50">
       <div className="container-section">
@@ -19,18 +61,24 @@ const Services = () => {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {serviceCards.map((service, index) => (
-            <ServiceCard 
-              key={service.title}
-              title={service.title}
-              description={service.description}
-              icon={service.icon}
-              features={service.features}
-              delay={index}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service, index) => (
+              <ServiceCard 
+                key={service.id}
+                title={service.title}
+                description={service.description}
+                icon={getIconComponent(service.icon)}
+                features={service.features}
+                delay={index}
+              />
+            ))}
+          </div>
+        )}
         
         <div className="mt-16 text-center">
           <a 
@@ -79,68 +127,5 @@ const ServiceCard = ({ title, description, icon: Icon, features, delay }: Servic
     </div>
   );
 };
-
-const serviceCards = [
-  {
-    title: 'Maintenance & Repairs',
-    description: 'Keep your property in perfect condition with our comprehensive maintenance services.',
-    icon: Wrench,
-    features: [
-      'Emergency repairs available 24/7',
-      'Scheduled preventative maintenance',
-      'Detailed documentation and reporting',
-    ],
-  },
-  {
-    title: 'Interior Renovations',
-    description: 'Transform your spaces with our professional renovation and remodeling services.',
-    icon: Paintbrush,
-    features: [
-      'Kitchen and bathroom remodels',
-      'Flooring installation and repair',
-      'Custom cabinetry and fixtures',
-    ],
-  },
-  {
-    title: 'Property Inspections',
-    description: 'Thorough inspections to identify issues before they become costly problems.',
-    icon: Search,
-    features: [
-      'Detailed condition reports with photos',
-      'Move-in and move-out assessments',
-      'Preventative maintenance recommendations',
-    ],
-  },
-  {
-    title: 'Turn Services',
-    description: 'Expert make-ready services to prepare your property for new occupants quickly.',
-    icon: Zap,
-    features: [
-      '48-hour standard turnaround time',
-      'Deep cleaning and refreshing',
-      'Minor repairs and touch-ups included',
-    ],
-  },
-  {
-    title: 'Property Protection',
-    description: 'Safeguard your investment with our comprehensive property protection services.',
-    icon: Shield,
-    features: [
-      'Security system installation and monitoring',
-      'Weatherproofing and seasonal preparation',
-      'Emergency response protocols',
-    ],
-  },
-  {
-    title: 'Routine Services',
-    description: 'Regular scheduled maintenance to keep your property in optimal condition.',
-    icon: Clock,
-    features: [
-      'Landscape maintenance and care',
-      'HVAC servicing and filter replacement',
-      'Gutter cleaning and maintenance',
-    ],
-  },
-];
 
 export default Services;

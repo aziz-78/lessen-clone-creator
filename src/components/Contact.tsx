@@ -1,9 +1,10 @@
-
 import React, { useState } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
+import { submitContactForm, ContactFormData } from '../utils/api';
+import { useToast } from "@/components/ui/use-toast";
 
 const Contact = () => {
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<ContactFormData>({
     name: '',
     email: '',
     phone: '',
@@ -13,33 +14,59 @@ const Contact = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { toast } = useToast();
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormState({
-        name: '',
-        email: '',
-        phone: '',
-        message: '',
-        propertyType: 'residential',
-      });
+    try {
+      const response = await submitContactForm(formState);
       
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
-    }, 1500);
+      if (response.success) {
+        toast({
+          title: "Success",
+          description: response.message,
+          duration: 5000,
+        });
+        
+        setIsSubmitted(true);
+        setFormState({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+          propertyType: 'residential',
+        });
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => {
+          setIsSubmitted(false);
+        }, 5000);
+      } else {
+        toast({
+          title: "Error",
+          description: response.message,
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
